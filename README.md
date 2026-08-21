@@ -28,6 +28,7 @@ Aplicación web para la gestión de Estudiantes, Profesores y Notas: creación, 
 - Autenticación con JWT: toda la aplicación y el API requieren iniciar sesión.
 - Gestión completa (crear, editar, eliminar, consultar) de Estudiantes, Profesores y Notas.
 - Paginación server-side en los tres listados.
+- Filtro por Estudiante y por Profesor en el listado de Notas, para ver de una vez todas las calificaciones de una persona.
 - Integridad referencial: no es posible eliminar un Estudiante o Profesor que tenga una Nota asociada; la aplicación muestra una alerta explicando el motivo.
 - Notificaciones de éxito y error en cada operación.
 - Panel de inicio con conteo de registros por sección y estadísticas de rendimiento académico (promedio general, porcentaje de estudiantes aprobados y reprobados).
@@ -215,7 +216,7 @@ La aplicación cuenta con cuatro secciones, accesibles desde la barra de navegac
 
 - **Inicio**: resumen con el total de registros por sección y una tarjeta de rendimiento académico con el promedio general de notas y el porcentaje de estudiantes aprobados/reprobados (un estudiante aprueba con un promedio de notas de 3.0 o más).
 - **Estudiantes** / **Profesores**: listado paginado con la cantidad de notas asociadas a cada registro, y acciones para crear, editar o eliminar.
-- **Notas**: listado paginado con el estudiante, el profesor y la calificación (0.0–5.0), indicando si está aprobada o reprobada.
+- **Notas**: listado paginado con el estudiante, el profesor y la calificación (0.0–5.0), indicando si está aprobada o reprobada. Se puede filtrar por Estudiante o por Profesor para ver únicamente sus calificaciones.
 
 Al eliminar un Estudiante o Profesor con notas asociadas, la aplicación bloquea la acción y explica el motivo en lugar de mostrar un error genérico.
 
@@ -235,7 +236,7 @@ URL base: `http://localhost:5080/api`. Las respuestas de error siguen el estánd
 | | `PUT` | `/estudiantes/{id}` | Actualizar |
 | | `DELETE` | `/estudiantes/{id}` | Eliminar |
 | Profesores | | `/profesores...` | Mismas operaciones que Estudiantes |
-| Notas | `GET` | `/notas?pageNumber=&pageSize=` | Listado paginado, incluye nombre de estudiante y profesor |
+| Notas | `GET` | `/notas?pageNumber=&pageSize=&idEstudiante=&idProfesor=` | Listado paginado, incluye nombre de estudiante y profesor; `idEstudiante`/`idProfesor` son opcionales y filtran el resultado |
 | | `POST` / `PUT` / `DELETE` | `/notas...` | CRUD estándar |
 | Estadísticas | `GET` | `/estadisticas` | Promedio general de notas y porcentaje de estudiantes aprobados/reprobados |
 

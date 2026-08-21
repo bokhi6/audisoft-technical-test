@@ -190,6 +190,23 @@
           }
         },
         {
+          "name": "Listar filtrado por estudiante o profesor",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/notas?pageNumber=1&pageSize=10&idEstudiante=1&idProfesor=1",
+              "host": ["{{baseUrl}}"],
+              "path": ["notas"],
+              "query": [
+                { "key": "pageNumber", "value": "1" },
+                { "key": "pageSize", "value": "10" },
+                { "key": "idEstudiante", "value": "1", "description": "Opcional: filtra por estudiante" },
+                { "key": "idProfesor", "value": "1", "description": "Opcional: filtra por profesor" }
+              ]
+            }
+          }
+        },
+        {
           "name": "Obtener por id",
           "request": {
             "method": "GET",
