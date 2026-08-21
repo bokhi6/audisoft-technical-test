@@ -76,8 +76,8 @@ Aplicación web full-stack para la gestión CRUD de Estudiantes, Profesores y No
 |---|---|---|
 | **Angular (última versión, standalone components)** | Framework del frontend | Pedido explícitamente por el PDF de la prueba. Se usa la forma moderna de Angular (sin NgModules, con signals) por ser el estándar actual del framework. |
 | **Angular Material** | Componentes funcionales complejos (tabla, paginador, diálogos modales, menús) | Reimplementar un paginador o un sistema de diálogos accesible desde cero no aporta valor a la prueba y consume tiempo; Material los resuelve de forma robusta y accesible. |
-| **Tailwind CSS** | Estilos y maquetación visual | Pedido explícitamente por el usuario para un diseño más vistoso y propio, en vez de depender solo del tema por defecto de Material. |
-| **SweetAlert2** | Alertas de éxito/error y confirmación de eliminación | Pedido explícitamente; da una experiencia de alerta más pulida y consistente que los componentes nativos del navegador. |
+| **Tailwind CSS** | Estilos y maquetación visual | Para lograr un diseño más vistoso y propio, en vez de depender solo del tema por defecto de Material. |
+| **SweetAlert2** | Alertas de éxito/error y confirmación de eliminación | Ofrece una experiencia de alerta más pulida y consistente que los componentes nativos del navegador. |
 | **RxJS / HttpClient** | Comunicación con el API | Viene integrado en Angular; se usa un interceptor HTTP para centralizar el manejo de errores del backend. |
 | **ESLint (`angular-eslint`)** | Calidad de código y accesibilidad | Detectó y permitió corregir 11 problemas reales de accesibilidad (labels sin asociar a su input, uso de `autofocus`) que no se habrían notado a simple vista. |
 
@@ -160,7 +160,7 @@ Requiere [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 docker compose up --build
 ```
 
-> ⏱️ **La primera vez tarda entre 5 y 10 minutos** (descarga las imágenes base de SQL Server y del SDK de .NET, que pesan varios GB, y compila ambos proyectos). No se queda colgado — si quieres ver el progreso real en vez de esperar en silencio, corre `docker compose up --build` sin `-d` y deja la terminal abierta, vas a ver los logs de descarga/compilación en vivo. Las siguientes veces es mucho más rápido porque Docker reutiliza las capas ya descargadas y compiladas.
+> ⏱️ **La primera vez tarda entre 5 y 10 minutos** (descarga las imágenes base de SQL Server y del SDK de .NET, que pesan varios GB, y compila ambos proyectos). No se queda colgado: ejecutando el comando sin `-d` y dejando la terminal abierta se puede ver el progreso real de descarga/compilación en vivo. Las siguientes veces es mucho más rápido porque Docker reutiliza las capas ya descargadas y compiladas.
 
 Levanta 3 contenedores: SQL Server, backend (aplica las migraciones automáticamente al arrancar) y frontend (servido con nginx). Probado end-to-end: crea la base de datos desde cero, siembra los datos de ejemplo y sirve la aplicación funcional.
 
