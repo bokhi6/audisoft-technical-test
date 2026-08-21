@@ -13,11 +13,11 @@
 
   <form [formGroup]="form" (ngSubmit)="guardar()" class="px-6 py-6">
 
-    <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Nombre de la nota</label>
+    <label for="nota-nombre" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Nombre de la nota</label>
     <input
+      id="nota-nombre"
       formControlName="nombre"
       placeholder="Ej. Parcial 1"
-      autofocus
       maxlength="200"
       class="w-full rounded-xl border px-3 py-2.5 text-sm text-slate-800 outline-none transition-colors focus:border-emerald-500"
       [class.border-slate-200]="!form.controls.nombre.touched || form.controls.nombre.valid"
@@ -28,8 +28,8 @@
 
     <div class="grid grid-cols-2 gap-4 mt-4">
       <div>
-        <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Estudiante</label>
-        <select formControlName="idEstudiante"
+        <label for="nota-estudiante" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Estudiante</label>
+        <select id="nota-estudiante" formControlName="idEstudiante"
           class="w-full rounded-xl border px-3 py-2.5 text-sm text-slate-800 outline-none transition-colors focus:border-emerald-500 bg-white"
           [class.border-slate-200]="!form.controls.idEstudiante.touched || form.controls.idEstudiante.valid"
           [class.border-rose-400]="form.controls.idEstudiante.touched && form.controls.idEstudiante.invalid">
@@ -44,8 +44,8 @@
       </div>
 
       <div>
-        <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Profesor</label>
-        <select formControlName="idProfesor"
+        <label for="nota-profesor" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Profesor</label>
+        <select id="nota-profesor" formControlName="idProfesor"
           class="w-full rounded-xl border px-3 py-2.5 text-sm text-slate-800 outline-none transition-colors focus:border-emerald-500 bg-white"
           [class.border-slate-200]="!form.controls.idProfesor.touched || form.controls.idProfesor.valid"
           [class.border-rose-400]="form.controls.idProfesor.touched && form.controls.idProfesor.invalid">
@@ -60,11 +60,12 @@
       </div>
     </div>
 
-    <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5 mt-4">
+    <label for="nota-valor" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5 mt-4">
       Valor (0.0 – 5.0)
     </label>
     <div class="flex items-center gap-3">
       <input
+        id="nota-valor"
         formControlName="valor"
         type="number" step="0.1" min="0" max="5"
         placeholder="0.0"

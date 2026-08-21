@@ -12,11 +12,11 @@
   <form [formGroup]="form" (ngSubmit)="guardar()" class="px-6 py-6">
     <div class="grid grid-cols-2 gap-4">
       <div>
-        <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Nombres</label>
+        <label for="estudiante-nombres" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Nombres</label>
         <input
+          id="estudiante-nombres"
           formControlName="nombres"
           placeholder="Ej. Juan Carlos"
-          autofocus
           maxlength="100"
           class="w-full rounded-xl border px-3 py-2.5 text-sm text-slate-800 outline-none transition-colors focus:border-indigo-500"
           [class.border-slate-200]="!form.controls.nombres.touched || form.controls.nombres.valid"
@@ -27,8 +27,9 @@
       </div>
 
       <div>
-        <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Apellidos</label>
+        <label for="estudiante-apellidos" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Apellidos</label>
         <input
+          id="estudiante-apellidos"
           formControlName="apellidos"
           placeholder="Ej. Pérez Ramírez"
           maxlength="100"
