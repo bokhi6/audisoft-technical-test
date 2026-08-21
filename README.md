@@ -14,8 +14,7 @@ Aplicación web full-stack para la gestión CRUD de Estudiantes, Profesores y No
 6. [API REST](#api-rest)
 7. [Pruebas y calidad de código](#pruebas-y-calidad-de-código)
 8. [Decisiones de diseño](#decisiones-de-diseño)
-9. [Qué le falta para un 100/100](#qué-le-falta-para-un-100100)
-10. [Entregables](#entregables)
+9. [Entregables](#entregables)
 
 ---
 
@@ -239,48 +238,7 @@ Las pruebas unitarias del backend cubren específicamente las reglas de negocio 
 - **Escala de la Nota**: 0.0 a 5.0 (estándar académico), validada en frontend y backend. Es un cambio trivial si se esperaba una escala 0–100.
 - **Paginación de 3 por página**: para que los 5 registros de ejemplo de cada tabla se distribuyan en 2 páginas y la paginación quede demostrable con poca data.
 - **Nombres/Apellidos en el formulario, un solo campo `Nombre` en la base de datos**: el PDF fija el esquema de Estudiante y Profesor como `id, nombre` — se mantuvo ese esquema exacto en la base de datos, pero el formulario se enriqueció dividiendo la captura en dos campos que se concatenan al guardar.
-- **Sin autenticación/login**: no fue pedido por el PDF ni por el audio de recomendaciones, y se priorizó terminar bien lo que sí era requisito dado el plazo. Ver la sección siguiente para el detalle de esta decisión.
-
----
-
-## Qué le falta para un 100/100
-
-Todo lo pedido explícitamente en el PDF y en el audio de recomendaciones está cubierto. Esta sección es una autoevaluación honesta de lo que le faltaría a esta prueba para ser una aplicación **lista para producción real** (no solo para pasar la evaluación), organizado por categoría:
-
-### Seguridad
-- **Autenticación y autorización** (login, JWT o cookies de sesión, roles). Hoy el API es completamente abierto — cualquiera con la URL puede modificar datos. Se decidió no implementarlo por no ser un requisito de la prueba y por el riesgo de tiempo, pero es lo primero que faltaría para un entorno real.
-- **Rate limiting** en el API para prevenir abuso.
-- **Secretos fuera del código**: la contraseña de SQL Server en `docker-compose.yml` está en texto plano (uso aceptable solo en desarrollo local); en producción iría en un gestor de secretos (Azure Key Vault, AWS Secrets Manager, variables de entorno inyectadas por el orquestador).
-- **HTTPS** forzado (hoy corre en HTTP tanto local como en Docker, por simplicidad).
-
-### Testing
-- **Pruebas de integración** del backend (contra una base de datos real, ej. con Testcontainers) — las pruebas actuales usan mocks, que validan la lógica de negocio pero no el comportamiento real de EF Core/SQL Server.
-- **Pruebas del frontend** (unitarias con Jasmine/Karma o Vitest, y end-to-end con Playwright/Cypress) — hoy el frontend no tiene pruebas automatizadas, solo se verificó manualmente en el navegador.
-- **Cobertura de código** medida y reportada (ej. Coverlet + reporte HTML).
-
-### DevOps / CI-CD
-- **Pipeline de integración continua** (GitHub Actions) que corra build, lint y tests en cada push/PR — hoy todo se corrió manualmente.
-- **Healthchecks** del backend en Docker (`/health` endpoint) para que `docker-compose` pueda esperar a que el API esté realmente listo, no solo que el proceso haya arrancado.
-- **Migraciones separadas del arranque en producción**: aplicar migraciones automáticamente al iniciar (como se hizo aquí) es cómodo para desarrollo/demo, pero en un entorno productivo real normalmente se ejecutan como un paso explícito y controlado del pipeline de despliegue.
-
-### Datos y API
-- **Auditoría**: fecha de creación/modificación y quién hizo el cambio en cada registro.
-- **Borrado lógico (soft delete)** en vez de eliminación física, para poder auditar/recuperar.
-- **Búsqueda y filtros** en las tablas (hoy solo hay paginación, no búsqueda por nombre).
-- **Ordenamiento** de columnas en las tablas.
-- **Versionado del API** (`/api/v1/...`) para poder evolucionar sin romper clientes existentes.
-
-### Frontend / UX
-- **Modo oscuro**.
-- **Internacionalización** (i18n) si se necesitara soportar más de un idioma.
-- **Skeleton loaders / estados de carga** más pulidos mientras llegan los datos (hoy la tabla simplemente aparece vacía un instante).
-- **Responsive completo** para móvil (se probó en escritorio; el diseño usa utilidades responsive de Tailwind pero no se validó exhaustivamente en pantallas pequeñas).
-
-### Observabilidad
-- **Logging estructurado** (Serilog) con correlación de requests.
-- **Métricas y monitoreo** (Application Insights, Prometheus/Grafana, etc.) para un entorno productivo real.
-
-Ninguno de estos puntos es requisito de la prueba técnica — se documentan aquí a propósito, como evidencia de que las decisiones de alcance fueron conscientes y no por desconocimiento.
+- **Sin autenticación/login**: no fue pedido por el PDF ni por el audio de recomendaciones, y se priorizó terminar bien lo que sí era requisito dado el plazo.
 
 ---
 
