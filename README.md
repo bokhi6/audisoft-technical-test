@@ -16,8 +16,9 @@ Aplicación web para la gestión de Estudiantes, Profesores y Notas: creación, 
 4. [Instalación](#instalación)
 5. [Uso](#uso)
 6. [API](#api)
-7. [Pruebas y calidad de código](#pruebas-y-calidad-de-código)
-8. [Estructura del proyecto](#estructura-del-proyecto)
+7. [Integración continua (CI)](#integración-continua)
+8. [Pruebas y calidad de código](#pruebas-y-calidad-de-código)
+9. [Estructura del proyecto](#estructura-del-proyecto)
 
 ---
 
@@ -223,11 +224,9 @@ La especificación completa, con esquemas de request/response, está disponible 
 
 ---
 
-## Pruebas y calidad de código
+## Integración continua
 
-### Integración continua
-
-Cada push o pull request a `master` dispara automáticamente el workflow definido en [`.github/workflows/ci.yml`](.github/workflows/ci.yml), con dos jobs independientes:
+Cada push o pull request a `master` dispara automáticamente un pipeline de **GitHub Actions**, definido en [`.github/workflows/ci.yml`](.github/workflows/ci.yml), con dos jobs independientes:
 
 | Job | Pasos |
 |---|---|
@@ -235,6 +234,10 @@ Cada push o pull request a `master` dispara automáticamente el workflow definid
 | **Frontend** | `npm ci` → `ng lint` → `ng build` |
 
 El resultado de la última ejecución se puede ver en la pestaña [Actions](https://github.com/bokhi6/audisoft-technical-test/actions) del repositorio, o en el badge al inicio de este documento.
+
+---
+
+## Pruebas y calidad de código
 
 ### Ejecutar las verificaciones localmente
 
