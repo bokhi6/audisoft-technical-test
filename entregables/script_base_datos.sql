@@ -129,3 +129,50 @@ END;
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260821140031_AgregarUsuarios'
+)
+BEGIN
+    CREATE TABLE [Usuarios] (
+        [Id] int NOT NULL IDENTITY,
+        [NombreUsuario] nvarchar(100) NOT NULL,
+        [PasswordHash] nvarchar(200) NOT NULL,
+        CONSTRAINT [PK_Usuarios] PRIMARY KEY ([Id])
+    );
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260821140031_AgregarUsuarios'
+)
+BEGIN
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'NombreUsuario', N'PasswordHash') AND [object_id] = OBJECT_ID(N'[Usuarios]'))
+        SET IDENTITY_INSERT [Usuarios] ON;
+    EXEC(N'INSERT INTO [Usuarios] ([Id], [NombreUsuario], [PasswordHash])
+    VALUES (1, N''admin'', N''100000.1JvNEpZMYCX38xYzYqLkyw==.HuUv4EiH+OrkB0eNlHkAM4ewcL7f/IQsJvDC3LHMeSQ='')');
+    IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'Id', N'NombreUsuario', N'PasswordHash') AND [object_id] = OBJECT_ID(N'[Usuarios]'))
+        SET IDENTITY_INSERT [Usuarios] OFF;
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260821140031_AgregarUsuarios'
+)
+BEGIN
+    CREATE UNIQUE INDEX [IX_Usuarios_NombreUsuario] ON [Usuarios] ([NombreUsuario]);
+END;
+
+IF NOT EXISTS (
+    SELECT * FROM [__EFMigrationsHistory]
+    WHERE [MigrationId] = N'20260821140031_AgregarUsuarios'
+)
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20260821140031_AgregarUsuarios', N'10.0.11');
+END;
+
+COMMIT;
+GO
+
