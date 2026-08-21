@@ -4,7 +4,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Profesor } from '../../../shared/models/profesor.model';
 import { NotificacionService } from '../../../core/services/notificacion.service';
@@ -14,7 +13,7 @@ import { ProfesorFormDialogComponent, ProfesorFormDialogData } from '../profesor
 @Component({
   selector: 'app-profesores-list',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatToolbarModule, MatDialogModule],
+  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatDialogModule],
   templateUrl: './profesores-list.component.html'
 })
 export class ProfesoresListComponent implements OnInit {
@@ -47,7 +46,7 @@ export class ProfesoresListComponent implements OnInit {
 
   abrirCrear(): void {
     const data: ProfesorFormDialogData = { modo: 'crear' };
-    const ref = this.dialog.open(ProfesorFormDialogComponent, { width: '420px', data });
+    const ref = this.dialog.open(ProfesorFormDialogComponent, { width: '420px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(resultado => {
       if (!resultado) return;
@@ -63,7 +62,7 @@ export class ProfesoresListComponent implements OnInit {
 
   abrirEditar(profesor: Profesor): void {
     const data: ProfesorFormDialogData = { modo: 'editar', profesor };
-    const ref = this.dialog.open(ProfesorFormDialogComponent, { width: '420px', data });
+    const ref = this.dialog.open(ProfesorFormDialogComponent, { width: '420px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(resultado => {
       if (!resultado) return;
@@ -82,7 +81,7 @@ export class ProfesoresListComponent implements OnInit {
       titulo: 'Eliminar profesor',
       mensaje: `¿Está seguro de que desea eliminar a "${profesor.nombre}"?`
     };
-    const ref = this.dialog.open(ConfirmDialogComponent, { width: '400px', data });
+    const ref = this.dialog.open(ConfirmDialogComponent, { width: '380px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(confirmado => {
       if (!confirmado) return;

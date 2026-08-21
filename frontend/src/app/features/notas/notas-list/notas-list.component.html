@@ -1,57 +1,79 @@
-<div class="p-6 max-w-5xl mx-auto">
-  <div class="flex items-center justify-between mb-4">
-    <h1 class="text-2xl font-semibold text-gray-800">Gestión de Notas</h1>
-    <button mat-raised-button color="primary" (click)="abrirCrear()">
-      <mat-icon>add</mat-icon>
+<div class="max-w-6xl mx-auto px-6 py-10">
+
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+      </div>
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Gestión de Notas</h1>
+        <p class="text-sm text-slate-500">Registra y consulta las calificaciones asignadas.</p>
+      </div>
+    </div>
+
+    <button (click)="abrirCrear()"
+      class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:shadow-lg hover:brightness-105 transition-all">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12h14"/>
+      </svg>
       Crear nota
     </button>
   </div>
 
-  <div class="bg-white rounded-lg shadow overflow-x-auto">
-    <table mat-table [dataSource]="notas()" class="w-full">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>Id</th>
-        <td mat-cell *matCellDef="let nota">{{ nota.id }}</td>
-      </ng-container>
+  <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table mat-table [dataSource]="notas()" class="w-full">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef class="!bg-slate-50 !text-slate-500 !text-xs !font-semibold !uppercase !tracking-wide">Id</th>
+          <td mat-cell *matCellDef="let nota" class="!text-slate-400 !text-sm">#{{ nota.id }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef>Nombre</th>
-        <td mat-cell *matCellDef="let nota">{{ nota.nombre }}</td>
-      </ng-container>
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef class="!bg-slate-50 !text-slate-500 !text-xs !font-semibold !uppercase !tracking-wide">Nombre</th>
+          <td mat-cell *matCellDef="let nota" class="font-medium text-slate-800">{{ nota.nombre }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="estudiante">
-        <th mat-header-cell *matHeaderCellDef>Estudiante</th>
-        <td mat-cell *matCellDef="let nota">{{ nota.nombreEstudiante }}</td>
-      </ng-container>
+        <ng-container matColumnDef="estudiante">
+          <th mat-header-cell *matHeaderCellDef class="!bg-slate-50 !text-slate-500 !text-xs !font-semibold !uppercase !tracking-wide">Estudiante</th>
+          <td mat-cell *matCellDef="let nota" class="text-slate-600">{{ nota.nombreEstudiante }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="profesor">
-        <th mat-header-cell *matHeaderCellDef>Profesor</th>
-        <td mat-cell *matCellDef="let nota">{{ nota.nombreProfesor }}</td>
-      </ng-container>
+        <ng-container matColumnDef="profesor">
+          <th mat-header-cell *matHeaderCellDef class="!bg-slate-50 !text-slate-500 !text-xs !font-semibold !uppercase !tracking-wide">Profesor</th>
+          <td mat-cell *matCellDef="let nota" class="text-slate-600">{{ nota.nombreProfesor }}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="valor">
-        <th mat-header-cell *matHeaderCellDef>Valor</th>
-        <td mat-cell *matCellDef="let nota">{{ nota.valor }}</td>
-      </ng-container>
+        <ng-container matColumnDef="valor">
+          <th mat-header-cell *matHeaderCellDef class="!bg-slate-50 !text-slate-500 !text-xs !font-semibold !uppercase !tracking-wide">Valor</th>
+          <td mat-cell *matCellDef="let nota">
+            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+                  [class]="nota.valor >= 3 ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'">
+              {{ nota.valor }} · {{ nota.valor >= 3 ? 'Aprobado' : 'Reprobado' }}
+            </span>
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="acciones">
-        <th mat-header-cell *matHeaderCellDef>Acciones</th>
-        <td mat-cell *matCellDef="let nota">
-          <button mat-icon-button color="primary" (click)="abrirEditar(nota)" aria-label="Editar">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-icon-button color="warn" (click)="abrirEliminar(nota)" aria-label="Eliminar">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </td>
-      </ng-container>
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef class="!bg-slate-50 !text-slate-500 !text-xs !font-semibold !uppercase !tracking-wide">Acciones</th>
+          <td mat-cell *matCellDef="let nota">
+            <button mat-icon-button color="primary" (click)="abrirEditar(nota)" aria-label="Editar">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="abrirEliminar(nota)" aria-label="Eliminar">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="columnasVisibles"></tr>
-      <tr mat-row *matRowDef="let row; columns: columnasVisibles;"></tr>
-    </table>
+        <tr mat-header-row *matHeaderRowDef="columnasVisibles"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnasVisibles;" class="hover:bg-slate-50 transition-colors"></tr>
+      </table>
+    </div>
 
     @if (notas().length === 0) {
-      <p class="text-center text-gray-500 py-8">No hay notas registradas.</p>
+      <p class="text-center text-slate-400 py-10">No hay notas registradas.</p>
     }
 
     <mat-paginator

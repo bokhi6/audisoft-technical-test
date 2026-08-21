@@ -4,7 +4,6 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Nota } from '../../../shared/models/nota.model';
 import { NotificacionService } from '../../../core/services/notificacion.service';
@@ -14,7 +13,7 @@ import { NotaFormDialogComponent, NotaFormDialogData } from '../nota-form-dialog
 @Component({
   selector: 'app-notas-list',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatToolbarModule, MatDialogModule],
+  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatDialogModule],
   templateUrl: './notas-list.component.html'
 })
 export class NotasListComponent implements OnInit {
@@ -47,7 +46,7 @@ export class NotasListComponent implements OnInit {
 
   abrirCrear(): void {
     const data: NotaFormDialogData = { modo: 'crear' };
-    const ref = this.dialog.open(NotaFormDialogComponent, { width: '460px', data });
+    const ref = this.dialog.open(NotaFormDialogComponent, { width: '480px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(resultado => {
       if (!resultado) return;
@@ -63,7 +62,7 @@ export class NotasListComponent implements OnInit {
 
   abrirEditar(nota: Nota): void {
     const data: NotaFormDialogData = { modo: 'editar', nota };
-    const ref = this.dialog.open(NotaFormDialogComponent, { width: '460px', data });
+    const ref = this.dialog.open(NotaFormDialogComponent, { width: '480px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(resultado => {
       if (!resultado) return;
@@ -82,7 +81,7 @@ export class NotasListComponent implements OnInit {
       titulo: 'Eliminar nota',
       mensaje: `¿Está seguro de que desea eliminar la nota "${nota.nombre}"?`
     };
-    const ref = this.dialog.open(ConfirmDialogComponent, { width: '400px', data });
+    const ref = this.dialog.open(ConfirmDialogComponent, { width: '380px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(confirmado => {
       if (!confirmado) return;

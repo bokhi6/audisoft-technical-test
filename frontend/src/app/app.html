@@ -1,10 +1,34 @@
-<mat-toolbar color="primary" class="!px-4">
-  <span class="font-medium mr-8">AudiSoft — Prueba Técnica</span>
-  <a mat-button routerLink="/estudiantes" routerLinkActive="!bg-white/20" class="!text-white">Estudiantes</a>
-  <a mat-button routerLink="/profesores" routerLinkActive="!bg-white/20" class="!text-white">Profesores</a>
-  <a mat-button routerLink="/notas" routerLinkActive="!bg-white/20" class="!text-white">Notas</a>
-</mat-toolbar>
+<header class="sticky top-0 z-40 bg-gradient-to-r from-indigo-800 to-blue-700 shadow-md">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a routerLink="/" class="flex items-center gap-3 text-white">
+      <div class="w-9 h-9 rounded-lg bg-white/15 flex items-center justify-center font-bold text-lg">A</div>
+      <div class="leading-tight">
+        <div class="font-semibold">AudiSoft</div>
+        <div class="text-[11px] text-indigo-200 -mt-0.5">Prueba Técnica</div>
+      </div>
+    </a>
 
-<main class="bg-gray-50 min-h-screen">
+    <nav class="flex items-center gap-1">
+      <a routerLink="/" routerLinkActive="bg-white/15" [routerLinkActiveOptions]="{exact: true}"
+         class="px-4 py-2 rounded-full text-sm font-medium text-indigo-50 hover:bg-white/10 transition-colors">
+        Inicio
+      </a>
+      <a routerLink="/estudiantes" routerLinkActive="bg-white/15"
+         class="px-4 py-2 rounded-full text-sm font-medium text-indigo-50 hover:bg-white/10 transition-colors">
+        Estudiantes
+      </a>
+      <a routerLink="/profesores" routerLinkActive="bg-white/15"
+         class="px-4 py-2 rounded-full text-sm font-medium text-indigo-50 hover:bg-white/10 transition-colors">
+        Profesores
+      </a>
+      <a routerLink="/notas" routerLinkActive="bg-white/15"
+         class="px-4 py-2 rounded-full text-sm font-medium text-indigo-50 hover:bg-white/10 transition-colors">
+        Notas
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main class="bg-slate-50 min-h-[calc(100vh-4rem)]">
   <router-outlet></router-outlet>
 </main>

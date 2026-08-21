@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'estudiantes', pathMatch: 'full' },
+  { path: '', pathMatch: 'full', loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent) },
   {
     path: 'estudiantes',
     loadComponent: () =>
@@ -20,5 +20,5 @@ export const routes: Routes = [
       import('./features/notas/notas-list/notas-list.component')
         .then(m => m.NotasListComponent)
   },
-  { path: '**', redirectTo: 'estudiantes' }
+  { path: '**', redirectTo: '' }
 ];

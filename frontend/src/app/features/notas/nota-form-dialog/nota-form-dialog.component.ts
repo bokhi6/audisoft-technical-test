@@ -1,10 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Nota } from '../../../shared/models/nota.model';
 import { ItemLista } from '../../../shared/models/item-lista.model';
 import { EstudiantesService } from '../../estudiantes/estudiantes.service';
@@ -18,7 +14,7 @@ export interface NotaFormDialogData {
 @Component({
   selector: 'app-nota-form-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatButtonModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './nota-form-dialog.component.html'
 })
 export class NotaFormDialogComponent implements OnInit {

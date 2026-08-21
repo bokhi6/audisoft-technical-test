@@ -16,3 +16,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   --mdc-snackbar-supporting-text-color: #ffffff;
   --mat-snack-bar-button-color: #ffffff;
 }
+
+.dialog-no-padding .mat-mdc-dialog-container .mdc-dialog__surface {
+  padding: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+

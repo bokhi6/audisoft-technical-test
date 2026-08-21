@@ -1,21 +1,53 @@
-<h2 mat-dialog-title>{{ tituloDialogo }}</h2>
+<div class="w-[420px] max-w-full">
+  <div class="bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-5 flex items-center gap-4">
+    <div class="w-12 h-12 rounded-full bg-white/15 text-white flex items-center justify-center text-lg font-bold shrink-0">
+      {{ (form.controls.nombre.value || '?').trim().slice(0, 2).toUpperCase() }}
+    </div>
+    <div>
+      <h2 class="text-white font-semibold text-lg leading-tight">{{ tituloDialogo }}</h2>
+      <p class="text-blue-100 text-xs">Registro de profesor</p>
+    </div>
+  </div>
 
-<form [formGroup]="form" (ngSubmit)="guardar()">
-  <mat-dialog-content>
-    <mat-form-field appearance="outline" class="w-full">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre" placeholder="Nombre del profesor" autofocus>
-      @if (form.controls.nombre.hasError('required')) {
-        <mat-error>El nombre es obligatorio.</mat-error>
-      }
-      @if (form.controls.nombre.hasError('maxlength')) {
-        <mat-error>El nombre no puede superar 200 caracteres.</mat-error>
-      }
-    </mat-form-field>
-  </mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="guardar()" class="px-6 py-6">
+    <label class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">
+      Nombre completo
+    </label>
+    <div class="relative">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>
+      </svg>
+      <input
+        formControlName="nombre"
+        placeholder="Ej. Andrés Torres"
+        autofocus
+        maxlength="200"
+        class="w-full rounded-xl border pl-10 pr-3 py-2.5 text-sm text-slate-800 outline-none transition-colors"
+        [class.border-slate-200]="!form.controls.nombre.touched || form.controls.nombre.valid"
+        [class.focus:border-blue-500]="true"
+        [class.border-rose-400]="form.controls.nombre.touched && form.controls.nombre.invalid">
+    </div>
 
-  <mat-dialog-actions align="end">
-    <button mat-button type="button" (click)="dialogRef.close()">Cancelar</button>
-    <button mat-raised-button color="primary" type="submit">Guardar</button>
-  </mat-dialog-actions>
-</form>
+    <div class="flex items-center justify-between mt-1.5 min-h-[18px]">
+      @if (form.controls.nombre.touched && form.controls.nombre.hasError('required')) {
+        <span class="text-xs text-rose-500">El nombre es obligatorio.</span>
+      } @else if (form.controls.nombre.hasError('maxlength')) {
+        <span class="text-xs text-rose-500">Máximo 200 caracteres.</span>
+      } @else {
+        <span></span>
+      }
+      <span class="text-xs text-slate-400">{{ (form.controls.nombre.value || '').length }}/200</span>
+    </div>
+
+    <div class="flex justify-end gap-3 mt-6">
+      <button type="button" (click)="dialogRef.close()"
+        class="px-4 py-2 rounded-full text-sm font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+        Cancelar
+      </button>
+      <button type="submit"
+        class="px-5 py-2 rounded-full text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-cyan-600 shadow-md hover:shadow-lg hover:brightness-105 transition-all">
+        Guardar
+      </button>
+    </div>
+  </form>
+</div>
