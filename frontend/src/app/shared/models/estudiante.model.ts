@@ -1,6 +1,7 @@
 export interface Estudiante {
   id: number;
   nombre: string;
+  cantidadNotas: number;
 }
 
 export interface CrearEstudiante {

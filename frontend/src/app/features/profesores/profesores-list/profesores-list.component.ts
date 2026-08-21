@@ -2,9 +2,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Profesor } from '../../../shared/models/profesor.model';
 import { NotificacionService } from '../../../core/services/notificacion.service';
 import { ProfesoresService } from '../profesores.service';
@@ -13,7 +13,7 @@ import { ProfesorFormDialogComponent, ProfesorFormDialogData } from '../profesor
 @Component({
   selector: 'app-profesores-list',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatDialogModule],
+  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatMenuModule, MatDialogModule],
   templateUrl: './profesores-list.component.html'
 })
 export class ProfesoresListComponent implements OnInit {
@@ -21,7 +21,7 @@ export class ProfesoresListComponent implements OnInit {
   private dialog = inject(MatDialog);
   private notificacion = inject(NotificacionService);
 
-  columnasVisibles = ['id', 'nombre', 'acciones'];
+  columnasVisibles = ['id', 'nombre', 'notas', 'acciones'];
   profesores = signal<Profesor[]>([]);
   totalCount = signal(0);
   pageSize = signal(3);
@@ -46,7 +46,7 @@ export class ProfesoresListComponent implements OnInit {
 
   abrirCrear(): void {
     const data: ProfesorFormDialogData = { modo: 'crear' };
-    const ref = this.dialog.open(ProfesorFormDialogComponent, { width: '420px', panelClass: 'dialog-no-padding', data });
+    const ref = this.dialog.open(ProfesorFormDialogComponent, { width: '440px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(resultado => {
       if (!resultado) return;
@@ -62,7 +62,7 @@ export class ProfesoresListComponent implements OnInit {
 
   abrirEditar(profesor: Profesor): void {
     const data: ProfesorFormDialogData = { modo: 'editar', profesor };
-    const ref = this.dialog.open(ProfesorFormDialogComponent, { width: '420px', panelClass: 'dialog-no-padding', data });
+    const ref = this.dialog.open(ProfesorFormDialogComponent, { width: '440px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(resultado => {
       if (!resultado) return;
@@ -76,22 +76,19 @@ export class ProfesoresListComponent implements OnInit {
     });
   }
 
-  abrirEliminar(profesor: Profesor): void {
-    const data: ConfirmDialogData = {
-      titulo: 'Eliminar profesor',
-      mensaje: `¿Está seguro de que desea eliminar a "${profesor.nombre}"?`
-    };
-    const ref = this.dialog.open(ConfirmDialogComponent, { width: '380px', panelClass: 'dialog-no-padding', data });
+  async abrirEliminar(profesor: Profesor): Promise<void> {
+    const confirmado = await this.notificacion.confirmarEliminar(
+      'Eliminar profesor',
+      `¿Está seguro de que desea eliminar a "${profesor.nombre}"?`
+    );
+    if (!confirmado) return;
 
-    ref.afterClosed().subscribe(confirmado => {
-      if (!confirmado) return;
-      this.profesoresService.eliminar(profesor.id).subscribe({
-        next: () => {
-          this.notificacion.exito('El profesor se ha eliminado exitosamente.');
-          this.cargarPagina();
-        },
-        error: () => { /* el interceptor global ya muestra el mensaje de error */ }
-      });
+    this.profesoresService.eliminar(profesor.id).subscribe({
+      next: () => {
+        this.notificacion.exito('El profesor se ha eliminado exitosamente.');
+        this.cargarPagina();
+      },
+      error: () => { /* el interceptor global ya muestra el mensaje de error */ }
     });
   }
 }

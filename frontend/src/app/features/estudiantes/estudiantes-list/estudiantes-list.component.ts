@@ -2,9 +2,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Estudiante } from '../../../shared/models/estudiante.model';
 import { NotificacionService } from '../../../core/services/notificacion.service';
 import { EstudiantesService } from '../estudiantes.service';
@@ -13,7 +13,7 @@ import { EstudianteFormDialogComponent, EstudianteFormDialogData } from '../estu
 @Component({
   selector: 'app-estudiantes-list',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatDialogModule],
+  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatMenuModule, MatDialogModule],
   templateUrl: './estudiantes-list.component.html'
 })
 export class EstudiantesListComponent implements OnInit {
@@ -21,7 +21,7 @@ export class EstudiantesListComponent implements OnInit {
   private dialog = inject(MatDialog);
   private notificacion = inject(NotificacionService);
 
-  columnasVisibles = ['id', 'nombre', 'acciones'];
+  columnasVisibles = ['id', 'nombre', 'notas', 'acciones'];
   estudiantes = signal<Estudiante[]>([]);
   totalCount = signal(0);
   pageSize = signal(3);
@@ -46,7 +46,7 @@ export class EstudiantesListComponent implements OnInit {
 
   abrirCrear(): void {
     const data: EstudianteFormDialogData = { modo: 'crear' };
-    const ref = this.dialog.open(EstudianteFormDialogComponent, { width: '420px', panelClass: 'dialog-no-padding', data });
+    const ref = this.dialog.open(EstudianteFormDialogComponent, { width: '440px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(resultado => {
       if (!resultado) return;
@@ -62,7 +62,7 @@ export class EstudiantesListComponent implements OnInit {
 
   abrirEditar(estudiante: Estudiante): void {
     const data: EstudianteFormDialogData = { modo: 'editar', estudiante };
-    const ref = this.dialog.open(EstudianteFormDialogComponent, { width: '420px', panelClass: 'dialog-no-padding', data });
+    const ref = this.dialog.open(EstudianteFormDialogComponent, { width: '440px', panelClass: 'dialog-no-padding', data });
 
     ref.afterClosed().subscribe(resultado => {
       if (!resultado) return;
@@ -76,22 +76,19 @@ export class EstudiantesListComponent implements OnInit {
     });
   }
 
-  abrirEliminar(estudiante: Estudiante): void {
-    const data: ConfirmDialogData = {
-      titulo: 'Eliminar estudiante',
-      mensaje: `¿Está seguro de que desea eliminar a "${estudiante.nombre}"?`
-    };
-    const ref = this.dialog.open(ConfirmDialogComponent, { width: '380px', panelClass: 'dialog-no-padding', data });
+  async abrirEliminar(estudiante: Estudiante): Promise<void> {
+    const confirmado = await this.notificacion.confirmarEliminar(
+      'Eliminar estudiante',
+      `¿Está seguro de que desea eliminar a "${estudiante.nombre}"?`
+    );
+    if (!confirmado) return;
 
-    ref.afterClosed().subscribe(confirmado => {
-      if (!confirmado) return;
-      this.estudiantesService.eliminar(estudiante.id).subscribe({
-        next: () => {
-          this.notificacion.exito('El estudiante se ha eliminado exitosamente.');
-          this.cargarPagina();
-        },
-        error: () => { /* el interceptor global ya muestra el mensaje de error */ }
-      });
+    this.estudiantesService.eliminar(estudiante.id).subscribe({
+      next: () => {
+        this.notificacion.exito('El estudiante se ha eliminado exitosamente.');
+        this.cargarPagina();
+      },
+      error: () => { /* el interceptor global ya muestra el mensaje de error */ }
     });
   }
 }

@@ -1,6 +1,7 @@
 export interface Profesor {
   id: number;
   nombre: string;
+  cantidadNotas: number;
 }
 
 export interface CrearProfesor {

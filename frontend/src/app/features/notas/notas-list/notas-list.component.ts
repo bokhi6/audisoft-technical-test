@@ -2,9 +2,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { ConfirmDialogComponent, ConfirmDialogData } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { Nota } from '../../../shared/models/nota.model';
 import { NotificacionService } from '../../../core/services/notificacion.service';
 import { NotasService } from '../notas.service';
@@ -13,7 +13,7 @@ import { NotaFormDialogComponent, NotaFormDialogData } from '../nota-form-dialog
 @Component({
   selector: 'app-notas-list',
   standalone: true,
-  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatDialogModule],
+  imports: [MatTableModule, MatPaginatorModule, MatButtonModule, MatIconModule, MatMenuModule, MatDialogModule],
   templateUrl: './notas-list.component.html'
 })
 export class NotasListComponent implements OnInit {
@@ -76,22 +76,19 @@ export class NotasListComponent implements OnInit {
     });
   }
 
-  abrirEliminar(nota: Nota): void {
-    const data: ConfirmDialogData = {
-      titulo: 'Eliminar nota',
-      mensaje: `¿Está seguro de que desea eliminar la nota "${nota.nombre}"?`
-    };
-    const ref = this.dialog.open(ConfirmDialogComponent, { width: '380px', panelClass: 'dialog-no-padding', data });
+  async abrirEliminar(nota: Nota): Promise<void> {
+    const confirmado = await this.notificacion.confirmarEliminar(
+      'Eliminar nota',
+      `¿Está seguro de que desea eliminar la nota "${nota.nombre}"?`
+    );
+    if (!confirmado) return;
 
-    ref.afterClosed().subscribe(confirmado => {
-      if (!confirmado) return;
-      this.notasService.eliminar(nota.id).subscribe({
-        next: () => {
-          this.notificacion.exito('La nota se ha eliminado exitosamente.');
-          this.cargarPagina();
-        },
-        error: () => { /* el interceptor global ya muestra el mensaje de error */ }
-      });
+    this.notasService.eliminar(nota.id).subscribe({
+      next: () => {
+        this.notificacion.exito('La nota se ha eliminado exitosamente.');
+        this.cargarPagina();
+      },
+      error: () => { /* el interceptor global ya muestra el mensaje de error */ }
     });
   }
 }
