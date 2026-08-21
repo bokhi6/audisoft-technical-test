@@ -160,6 +160,8 @@ Requiere [Docker Desktop](https://www.docker.com/products/docker-desktop/).
 docker compose up --build
 ```
 
+> ⏱️ **La primera vez tarda entre 5 y 10 minutos** (descarga las imágenes base de SQL Server y del SDK de .NET, que pesan varios GB, y compila ambos proyectos). No se queda colgado — si quieres ver el progreso real en vez de esperar en silencio, corre `docker compose up --build` sin `-d` y deja la terminal abierta, vas a ver los logs de descarga/compilación en vivo. Las siguientes veces es mucho más rápido porque Docker reutiliza las capas ya descargadas y compiladas.
+
 Levanta 3 contenedores: SQL Server, backend (aplica las migraciones automáticamente al arrancar) y frontend (servido con nginx). Probado end-to-end: crea la base de datos desde cero, siembra los datos de ejemplo y sirve la aplicación funcional.
 
 - Frontend: http://localhost:4200
