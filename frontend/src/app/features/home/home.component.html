@@ -69,4 +69,45 @@
     </a>
 
   </div>
+
+  @if (estadisticas(); as stats) {
+    <div class="mt-8 bg-white rounded-2xl shadow-xl border border-slate-100 p-6">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-lg font-semibold text-slate-800">Rendimiento académico</h2>
+          <p class="text-sm text-slate-500">Basado en el promedio de notas de cada estudiante (aprueba con 3.0 o más).</p>
+        </div>
+        <div class="text-right">
+          <div class="text-3xl font-bold text-slate-800">{{ stats.promedioGeneral.toFixed(2) }}</div>
+          <div class="text-xs text-slate-400">Promedio general</div>
+        </div>
+      </div>
+
+      @if (stats.totalNotas > 0) {
+        <div class="flex h-3 rounded-full overflow-hidden bg-slate-100 mb-4">
+          <div class="bg-emerald-500" [style.width.%]="stats.porcentajeEstudiantesAprobados"></div>
+          <div class="bg-rose-500" [style.width.%]="stats.porcentajeEstudiantesReprobados"></div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+          <div class="rounded-xl bg-emerald-50 px-4 py-3">
+            <div class="text-2xl font-bold text-emerald-700">{{ stats.porcentajeEstudiantesAprobados }}%</div>
+            <div class="text-xs text-emerald-700/80">Aprobados · {{ stats.estudiantesAprobados }} estudiante(s)</div>
+          </div>
+          <div class="rounded-xl bg-rose-50 px-4 py-3">
+            <div class="text-2xl font-bold text-rose-700">{{ stats.porcentajeEstudiantesReprobados }}%</div>
+            <div class="text-xs text-rose-700/80">Reprobados · {{ stats.estudiantesReprobados }} estudiante(s)</div>
+          </div>
+          @if (stats.estudiantesSinNotas > 0) {
+            <div class="rounded-xl bg-slate-50 px-4 py-3">
+              <div class="text-2xl font-bold text-slate-500">{{ stats.estudiantesSinNotas }}</div>
+              <div class="text-xs text-slate-500/80">Sin notas registradas</div>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="text-sm text-slate-400">Aún no hay notas registradas para calcular el rendimiento.</p>
+      }
+    </div>
+  }
 </div>
