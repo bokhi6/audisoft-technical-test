@@ -228,6 +228,18 @@
           }
         }
       ]
+    },
+    {
+      "name": "Estadisticas",
+      "item": [
+        {
+          "name": "Resumen de rendimiento academico",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/estadisticas", "host": ["{{baseUrl}}"], "path": ["estadisticas"] }
+          }
+        }
+      ]
     }
   ]
 }

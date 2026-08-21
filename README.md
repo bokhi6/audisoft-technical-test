@@ -30,7 +30,7 @@ Aplicación web para la gestión de Estudiantes, Profesores y Notas: creación, 
 - Paginación server-side en los tres listados.
 - Integridad referencial: no es posible eliminar un Estudiante o Profesor que tenga una Nota asociada; la aplicación muestra una alerta explicando el motivo.
 - Notificaciones de éxito y error en cada operación.
-- Panel de inicio con conteo de registros por sección.
+- Panel de inicio con conteo de registros por sección y estadísticas de rendimiento académico (promedio general, porcentaje de estudiantes aprobados y reprobados).
 - Documentación interactiva del API (Swagger / OpenAPI).
 - Entorno completamente containerizado: toda la aplicación (base de datos, API y frontend) se levanta con un solo comando.
 
@@ -213,7 +213,7 @@ Sin un token válido, cualquier endpoint de Estudiantes, Profesores o Notas resp
 
 La aplicación cuenta con cuatro secciones, accesibles desde la barra de navegación:
 
-- **Inicio**: resumen con el total de registros por sección.
+- **Inicio**: resumen con el total de registros por sección y una tarjeta de rendimiento académico con el promedio general de notas y el porcentaje de estudiantes aprobados/reprobados (un estudiante aprueba con un promedio de notas de 3.0 o más).
 - **Estudiantes** / **Profesores**: listado paginado con la cantidad de notas asociadas a cada registro, y acciones para crear, editar o eliminar.
 - **Notas**: listado paginado con el estudiante, el profesor y la calificación (0.0–5.0), indicando si está aprobada o reprobada.
 
@@ -237,6 +237,7 @@ URL base: `http://localhost:5080/api`. Las respuestas de error siguen el estánd
 | Profesores | | `/profesores...` | Mismas operaciones que Estudiantes |
 | Notas | `GET` | `/notas?pageNumber=&pageSize=` | Listado paginado, incluye nombre de estudiante y profesor |
 | | `POST` / `PUT` / `DELETE` | `/notas...` | CRUD estándar |
+| Estadísticas | `GET` | `/estadisticas` | Promedio general de notas y porcentaje de estudiantes aprobados/reprobados |
 
 La especificación completa, con esquemas de request/response, está disponible en Swagger (`/swagger`). También se incluye una colección de Postman lista para importar en `entregables/AudiSoft.postman_collection.json`.
 
