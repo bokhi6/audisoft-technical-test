@@ -1,0 +1,18 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Angular / Node
+node_modules/
+.angular/
+dist/
+npm-debug.log*
+
+# Entregables generados que no van al repo (se entregan aparte como ZIP si aplica)
+*.zip
+
+# Editor
+.vscode/
