@@ -2,6 +2,8 @@
 
 Aplicación web para la gestión de Estudiantes, Profesores y Notas: creación, edición, eliminación y consulta paginada de cada recurso, con validación de integridad referencial entre ellos.
 
+[![CI](https://github.com/bokhi6/audisoft-technical-test/actions/workflows/ci.yml/badge.svg)](https://github.com/bokhi6/audisoft-technical-test/actions/workflows/ci.yml)
+
 **Desarrollado por:** Anthony Daza
 
 ---
@@ -74,41 +76,118 @@ El frontend está organizado por *features* (una carpeta por sección funcional)
 
 ## Instalación
 
-### Con Docker (recomendado)
+Hay dos formas de levantar el proyecto: con Docker (todo el entorno en un solo comando, recomendado) o de forma local instalando cada herramienta por separado.
 
-Requiere [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+### Opción A — Con Docker (recomendado)
+
+**1. Requisito único**: [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado y corriendo.
+
+Verificar que está disponible:
+
+```bash
+docker --version
+docker compose version
+```
+
+**2. Clonar el repositorio** (si aún no se hizo):
+
+```bash
+git clone https://github.com/bokhi6/audisoft-technical-test.git
+cd audisoft-technical-test
+```
+
+**3. Levantar todo el entorno** desde la raíz del proyecto:
 
 ```bash
 docker compose up --build
 ```
 
-La primera ejecución tarda entre 5 y 10 minutos (descarga de imágenes base y compilación); las siguientes son mucho más rápidas gracias al cache de capas de Docker. El comando levanta tres contenedores — base de datos, API y frontend — y aplica las migraciones automáticamente.
+Este único comando construye y levanta tres contenedores:
+
+| Contenedor | Contiene | Puerto expuesto |
+|---|---|---|
+| `audisoft-sqlserver` | Motor de base de datos SQL Server | 1433 |
+| `audisoft-backend` | API .NET (aplica las migraciones automáticamente al iniciar) | 5080 |
+| `audisoft-frontend` | Aplicación Angular compilada, servida con nginx | 4200 |
+
+> ⏱️ **La primera ejecución tarda entre 5 y 10 minutos** (descarga de las imágenes base de SQL Server y del SDK de .NET, y compilación de ambos proyectos). Las siguientes ejecuciones son mucho más rápidas porque Docker reutiliza las capas ya construidas. Si se corre sin `-d`, la terminal muestra el progreso de descarga y compilación en tiempo real.
+
+**4. Confirmar que quedó arriba**: cuando el log deja de imprimir líneas nuevas y se ve `Now listening on: http://+:8080` (backend) y `Application started` en pantalla, el entorno está listo.
 
 | Servicio | URL |
 |---|---|
-| Frontend | http://localhost:4200 |
-| API | http://localhost:5080 |
-| Documentación del API (Swagger) | http://localhost:5080/swagger |
+| Aplicación web | http://localhost:4200 |
+| API | http://localhost:5080/api |
+| Documentación interactiva del API (Swagger) | http://localhost:5080/swagger |
 
-Para detener el entorno: `docker compose down` (agregar `-v` para eliminar también los datos persistidos).
-
-### Sin Docker
-
-**Requisitos**: .NET SDK 10, Node.js 20+, SQL Server (o LocalDB), Angular CLI.
+**5. Para detener el entorno**:
 
 ```bash
-# Backend
+docker compose down
+```
+
+Agregar `-v` al final (`docker compose down -v`) si además se quiere eliminar la base de datos persistida y volver a empezar desde cero la próxima vez.
+
+**Problemas comunes**
+
+| Síntoma | Causa probable | Solución |
+|---|---|---|
+| `port is already allocated` | Otro proceso ya usa el puerto 4200, 5080 o 1433 | Detener ese proceso, o editar los puertos publicados en `docker-compose.yml` |
+| El backend no conecta a la base de datos | SQL Server aún no terminó de iniciar | Esperar unos segundos; el backend reintenta automáticamente y `docker-compose.yml` ya incluye un healthcheck que hace esperar al backend |
+| Cambios en el código no se reflejan | Las imágenes quedaron cacheadas | Volver a correr con `docker compose up --build` (fuerza la reconstrucción) |
+
+### Opción B — Instalación local (sin Docker)
+
+**Requisitos previos**:
+
+| Herramienta | Versión mínima | Verificar con |
+|---|---|---|
+| .NET SDK | 10.0 | `dotnet --version` |
+| Node.js | 20 LTS | `node --version` |
+| npm | (incluido con Node) | `npm --version` |
+| SQL Server o SQL Server LocalDB | — | — |
+| Angular CLI | última | `ng version` (instalar con `npm install -g @angular/cli` si falta) |
+
+**1. Clonar el repositorio**:
+
+```bash
+git clone https://github.com/bokhi6/audisoft-technical-test.git
+cd audisoft-technical-test
+```
+
+**2. Backend** — desde la carpeta `backend/`:
+
+```bash
 cd backend
 dotnet restore
 dotnet run --project src/AudiSoft.WebApi
+```
 
-# Frontend (en otra terminal)
+Al iniciar, el backend crea la base de datos (si no existe) y aplica las migraciones automáticamente — no hace falta ejecutar ningún comando de base de datos por separado. La consola debe mostrar `Now listening on: http://localhost:5080`. Para confirmar que responde:
+
+```bash
+curl http://localhost:5080/api/estudiantes?pageNumber=1&pageSize=1
+```
+
+Por defecto, el backend usa SQL Server LocalDB (`(localdb)\MSSQLLocalDB`); la cadena de conexión se puede ajustar en `backend/src/AudiSoft.WebApi/appsettings.json` si se quiere apuntar a otra instancia de SQL Server.
+
+**3. Frontend** — desde la carpeta `frontend/`, en otra terminal:
+
+```bash
 cd frontend
 npm install
 ng serve
 ```
 
-Las migraciones de base de datos se aplican automáticamente al iniciar el backend.
+La aplicación queda disponible en http://localhost:4200. El backend debe estar corriendo antes de abrir el frontend para que pueda consumir la API (el CORS ya está configurado para `http://localhost:4200`).
+
+**Problemas comunes**
+
+| Síntoma | Causa probable | Solución |
+|---|---|---|
+| `Cannot connect to database` | SQL Server / LocalDB no está corriendo | Verificar con `sqllocaldb info`, iniciar con `sqllocaldb start MSSQLLocalDB` |
+| Error de CORS en el navegador | El frontend corre en un puerto distinto a 4200 | Ajustar la política de CORS en `backend/src/AudiSoft.WebApi/Program.cs` |
+| `ng: command not found` | Angular CLI no está instalado globalmente | `npm install -g @angular/cli` |
 
 ---
 
@@ -146,21 +225,33 @@ La especificación completa, con esquemas de request/response, está disponible 
 
 ## Pruebas y calidad de código
 
-Cada push a `master` ejecuta un pipeline de integración continua (build, análisis estático y pruebas del backend; lint y build del frontend) — ver `.github/workflows/ci.yml`.
+### Integración continua
+
+Cada push o pull request a `master` dispara automáticamente el workflow definido en [`.github/workflows/ci.yml`](.github/workflows/ci.yml), con dos jobs independientes:
+
+| Job | Pasos |
+|---|---|
+| **Backend** | `dotnet restore` → `dotnet format --verify-no-changes` (falla si el código no está formateado) → `dotnet build -warnaserror` (falla ante cualquier advertencia de los analizadores) → `dotnet test` (pruebas unitarias) |
+| **Frontend** | `npm ci` → `ng lint` → `ng build` |
+
+El resultado de la última ejecución se puede ver en la pestaña [Actions](https://github.com/bokhi6/audisoft-technical-test/actions) del repositorio, o en el badge al inicio de este documento.
+
+### Ejecutar las verificaciones localmente
 
 ```bash
 # Backend
 cd backend
-dotnet test          # pruebas unitarias
-dotnet format        # formato de código
-dotnet build          # compilación + analizadores estáticos
+dotnet test           # pruebas unitarias
+dotnet format         # aplica formato de código automáticamente
+dotnet build           # compilación + analizadores estáticos
 
 # Frontend
 cd frontend
-ng lint               # análisis estático
+ng lint                # análisis estático (ESLint)
+ng build                # build de producción
 ```
 
-Las pruebas unitarias del backend cubren las reglas de negocio principales: restricción de eliminación por integridad referencial, validaciones de campos y manejo de recursos inexistentes.
+Las pruebas unitarias del backend (`AudiSoft.Application.Tests`, xUnit + Moq) cubren las reglas de negocio principales: restricción de eliminación por integridad referencial, validaciones de campos y manejo de recursos inexistentes.
 
 ---
 
