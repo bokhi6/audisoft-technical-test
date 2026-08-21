@@ -1,10 +1,12 @@
 using AudiSoft.Application.Estudiantes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AudiSoft.WebApi.Controllers;
 
 [ApiController]
 [Route("api/estudiantes")]
+[Authorize]
 public class EstudiantesController : ControllerBase
 {
     private readonly IEstudianteService _estudianteService;

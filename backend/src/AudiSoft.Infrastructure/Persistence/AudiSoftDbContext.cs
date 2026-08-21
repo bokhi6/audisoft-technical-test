@@ -10,6 +10,7 @@ public class AudiSoftDbContext : DbContext
     public DbSet<Estudiante> Estudiantes => Set<Estudiante>();
     public DbSet<Profesor> Profesores => Set<Profesor>();
     public DbSet<Nota> Notas => Set<Nota>();
+    public DbSet<Usuario> Usuarios => Set<Usuario>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

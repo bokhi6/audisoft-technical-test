@@ -1,10 +1,12 @@
 using AudiSoft.Application.Profesores;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AudiSoft.WebApi.Controllers;
 
 [ApiController]
 [Route("api/profesores")]
+[Authorize]
 public class ProfesoresController : ControllerBase
 {
     private readonly IProfesorService _profesorService;

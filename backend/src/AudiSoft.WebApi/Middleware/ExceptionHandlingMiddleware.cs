@@ -49,6 +49,11 @@ public class ExceptionHandlingMiddleware
                 titulo = "Error de validación";
                 detalle = exception.Message;
                 break;
+            case AutenticacionException:
+                status = StatusCodes.Status401Unauthorized;
+                titulo = "No autorizado";
+                detalle = exception.Message;
+                break;
             case NotFoundException:
                 status = StatusCodes.Status404NotFound;
                 titulo = "Recurso no encontrado";

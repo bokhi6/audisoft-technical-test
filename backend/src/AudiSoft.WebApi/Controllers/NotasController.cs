@@ -1,10 +1,12 @@
 using AudiSoft.Application.Notas;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AudiSoft.WebApi.Controllers;
 
 [ApiController]
 [Route("api/notas")]
+[Authorize]
 public class NotasController : ControllerBase
 {
     private readonly INotaService _notaService;
