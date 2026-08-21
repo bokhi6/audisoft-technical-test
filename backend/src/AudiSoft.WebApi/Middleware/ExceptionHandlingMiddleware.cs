@@ -5,6 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AudiSoft.WebApi.Middleware;
 
+public static partial class ExceptionHandlingLog
+{
+    [LoggerMessage(Level = LogLevel.Error, Message = "Error no controlado procesando {Path}")]
+    public static partial void ErrorNoControlado(ILogger logger, Exception exception, string path);
+}
+
 public class ExceptionHandlingMiddleware
 {
     private const int SqlErrorViolacionForeignKey = 547;
@@ -71,7 +77,7 @@ public class ExceptionHandlingMiddleware
 
         if (status == StatusCodes.Status500InternalServerError)
         {
-            _logger.LogError(exception, "Error no controlado procesando {Path}", context.Request.Path);
+            ExceptionHandlingLog.ErrorNoControlado(_logger, exception, context.Request.Path);
         }
 
         var problemDetails = new ProblemDetails

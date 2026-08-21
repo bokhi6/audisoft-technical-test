@@ -1,6 +1,8 @@
 using AudiSoft.Application;
 using AudiSoft.Infrastructure;
+using AudiSoft.Infrastructure.Persistence;
 using AudiSoft.WebApi.Middleware;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,15 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
+
+// Aplica migraciones pendientes automáticamente al arrancar (idempotente).
+// Simplifica tanto el arranque local como en contenedores Docker: no hace
+// falta correr "dotnet ef database update" a mano.
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AudiSoftDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
