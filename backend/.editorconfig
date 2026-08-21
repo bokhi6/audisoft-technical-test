@@ -23,3 +23,7 @@ indent_size = 2
 # Codigo autogenerado por EF Core: no aplican reglas de estilo de rendimiento manual.
 [**/Migrations/**.cs]
 dotnet_diagnostic.CA1861.severity = none
+
+# Convencion estandar de xUnit: MetodoProbado_Escenario_ResultadoEsperado con guiones bajos.
+[tests/**.cs]
+dotnet_diagnostic.CA1707.severity = none
