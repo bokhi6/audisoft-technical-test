@@ -30,6 +30,9 @@ public class NotaRepository : INotaRepository
         return (items, totalCount);
     }
 
+    public async Task<List<Nota>> ObtenerTodasAsync()
+        => await _context.Notas.AsNoTracking().ToListAsync();
+
     public async Task<Nota?> ObtenerPorIdAsync(int id)
         => await _context.Notas
             .Include(n => n.Estudiante)

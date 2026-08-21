@@ -1,4 +1,5 @@
 using AudiSoft.Application.Auth;
+using AudiSoft.Application.Estadisticas;
 using AudiSoft.Application.Estudiantes;
 using AudiSoft.Application.Notas;
 using AudiSoft.Application.Profesores;
@@ -14,6 +15,7 @@ public static class DependencyInjection
         services.AddScoped<IProfesorService, ProfesorService>();
         services.AddScoped<INotaService, NotaService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IEstadisticasService, EstadisticasService>();
 
         return services;
     }
