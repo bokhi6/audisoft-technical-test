@@ -22,6 +22,44 @@
     </button>
   </div>
 
+  <div class="bg-white rounded-2xl shadow-lg border border-slate-100 p-4 mb-6 flex flex-col sm:flex-row sm:items-end gap-4">
+    <div class="flex-1">
+      <label for="filtro-estudiante" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Filtrar por estudiante</label>
+      <select id="filtro-estudiante"
+        class="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 outline-none transition-colors focus:border-emerald-500 bg-white"
+        [value]="filtroEstudiante() ?? ''"
+        (change)="onFiltroEstudianteChange($any($event.target).value)">
+        <option value="">Todos los estudiantes</option>
+        @for (estudiante of estudiantesLista(); track estudiante.id) {
+          <option [value]="estudiante.id">{{ estudiante.nombre }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="flex-1">
+      <label for="filtro-profesor" class="block text-xs font-semibold uppercase tracking-wide text-slate-500 mb-1.5">Filtrar por profesor</label>
+      <select id="filtro-profesor"
+        class="w-full rounded-xl border border-slate-200 px-3 py-2.5 text-sm text-slate-800 outline-none transition-colors focus:border-emerald-500 bg-white"
+        [value]="filtroProfesor() ?? ''"
+        (change)="onFiltroProfesorChange($any($event.target).value)">
+        <option value="">Todos los profesores</option>
+        @for (profesor of profesoresLista(); track profesor.id) {
+          <option [value]="profesor.id">{{ profesor.nombre }}</option>
+        }
+      </select>
+    </div>
+
+    @if (filtroEstudiante() || filtroProfesor()) {
+      <button (click)="limpiarFiltros()"
+        class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+        Limpiar filtros
+      </button>
+    }
+  </div>
+
   <div class="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
     <div class="overflow-x-auto">
       <table mat-table [dataSource]="notas()" class="w-full">
@@ -80,7 +118,13 @@
     </div>
 
     @if (notas().length === 0) {
-      <p class="text-center text-slate-400 py-10">No hay notas registradas.</p>
+      <p class="text-center text-slate-400 py-10">
+        @if (filtroEstudiante() || filtroProfesor()) {
+          No hay notas registradas para el filtro seleccionado.
+        } @else {
+          No hay notas registradas.
+        }
+      </p>
     }
 
     <mat-paginator

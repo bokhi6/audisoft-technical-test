@@ -25,9 +25,9 @@ public class NotaService : INotaService
         _profesorRepository = profesorRepository;
     }
 
-    public async Task<PagedResultDto<NotaDto>> ObtenerPaginadoAsync(int pageNumber, int pageSize)
+    public async Task<PagedResultDto<NotaDto>> ObtenerPaginadoAsync(int pageNumber, int pageSize, int? idEstudiante = null, int? idProfesor = null)
     {
-        var (items, totalCount) = await _notaRepository.ObtenerPaginadoAsync(pageNumber, pageSize);
+        var (items, totalCount) = await _notaRepository.ObtenerPaginadoAsync(pageNumber, pageSize, idEstudiante, idProfesor);
         return new PagedResultDto<NotaDto>
         {
             Items = items.Select(MapearADto).ToList(),

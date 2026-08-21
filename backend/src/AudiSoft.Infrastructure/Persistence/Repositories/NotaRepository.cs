@@ -13,12 +13,14 @@ public class NotaRepository : INotaRepository
         _context = context;
     }
 
-    public async Task<(List<Nota> Items, int TotalCount)> ObtenerPaginadoAsync(int pageNumber, int pageSize)
+    public async Task<(List<Nota> Items, int TotalCount)> ObtenerPaginadoAsync(int pageNumber, int pageSize, int? idEstudiante = null, int? idProfesor = null)
     {
         var query = _context.Notas
             .AsNoTracking()
             .Include(n => n.Estudiante)
             .Include(n => n.Profesor)
+            .Where(n => idEstudiante == null || n.IdEstudiante == idEstudiante)
+            .Where(n => idProfesor == null || n.IdProfesor == idProfesor)
             .OrderBy(n => n.Id);
 
         var totalCount = await query.CountAsync();

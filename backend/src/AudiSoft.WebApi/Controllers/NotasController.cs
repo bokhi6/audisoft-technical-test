@@ -17,9 +17,13 @@ public class NotasController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> ObtenerPaginado([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 3)
+    public async Task<IActionResult> ObtenerPaginado(
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 3,
+        [FromQuery] int? idEstudiante = null,
+        [FromQuery] int? idProfesor = null)
     {
-        var resultado = await _notaService.ObtenerPaginadoAsync(pageNumber, pageSize);
+        var resultado = await _notaService.ObtenerPaginadoAsync(pageNumber, pageSize, idEstudiante, idProfesor);
         return Ok(resultado);
     }
 
