@@ -14,16 +14,18 @@ Aplicación web para la gestión de Estudiantes, Profesores y Notas: creación, 
 2. [Tecnologías](#tecnologías)
 3. [Arquitectura](#arquitectura)
 4. [Instalación](#instalación)
-5. [Uso](#uso)
-6. [API](#api)
-7. [Integración continua (CI)](#integración-continua)
-8. [Pruebas y calidad de código](#pruebas-y-calidad-de-código)
-9. [Estructura del proyecto](#estructura-del-proyecto)
+5. [Autenticación](#autenticación)
+6. [Uso](#uso)
+7. [API](#api)
+8. [Integración continua (CI)](#integración-continua)
+9. [Pruebas y calidad de código](#pruebas-y-calidad-de-código)
+10. [Estructura del proyecto](#estructura-del-proyecto)
 
 ---
 
 ## Características
 
+- Autenticación con JWT: toda la aplicación y el API requieren iniciar sesión.
 - Gestión completa (crear, editar, eliminar, consultar) de Estudiantes, Profesores y Notas.
 - Paginación server-side en los tres listados.
 - Integridad referencial: no es posible eliminar un Estudiante o Profesor que tenga una Nota asociada; la aplicación muestra una alerta explicando el motivo.
@@ -40,6 +42,7 @@ Aplicación web para la gestión de Estudiantes, Profesores y Notas: creación, 
 - .NET 10 / ASP.NET Core Web API
 - Entity Framework Core (Code-First, migraciones)
 - SQL Server
+- Autenticación JWT (`Microsoft.AspNetCore.Authentication.JwtBearer`), hash de contraseñas con PBKDF2
 - Swagger / Swashbuckle
 - xUnit + Moq (pruebas unitarias)
 
@@ -192,6 +195,20 @@ La aplicación queda disponible en http://localhost:4200. El backend debe estar 
 
 ---
 
+## Autenticación
+
+El acceso a la aplicación y al API requiere iniciar sesión. La autenticación se implementa con **JWT**: el endpoint `POST /api/auth/login` valida las credenciales contra la base de datos (contraseñas almacenadas con hash PBKDF2, nunca en texto plano) y devuelve un token firmado que debe enviarse en el header `Authorization: Bearer <token>` en cada petición posterior. El frontend gestiona esto automáticamente una vez se inicia sesión.
+
+**Credenciales del usuario de ejemplo** (creado por la migración inicial):
+
+| Usuario | Contraseña |
+|---|---|
+| `admin` | `Audisoft2026!` |
+
+Sin un token válido, cualquier endpoint de Estudiantes, Profesores o Notas responde `401 Unauthorized`. El frontend redirige automáticamente a la pantalla de inicio de sesión si no hay una sesión activa o si el token expira.
+
+---
+
 ## Uso
 
 La aplicación cuenta con cuatro secciones, accesibles desde la barra de navegación:
@@ -210,6 +227,7 @@ URL base: `http://localhost:5080/api`. Las respuestas de error siguen el estánd
 
 | Recurso | Método | Ruta | Descripción |
 |---|---|---|---|
+| Auth | `POST` | `/auth/login` | Inicia sesión y devuelve el token JWT (único endpoint público) |
 | Estudiantes | `GET` | `/estudiantes?pageNumber=&pageSize=` | Listado paginado |
 | | `GET` | `/estudiantes/lista` | Listado simple (id + nombre) |
 | | `GET` | `/estudiantes/{id}` | Detalle |

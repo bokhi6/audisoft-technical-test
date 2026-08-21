@@ -1,13 +1,46 @@
 {
   "info": {
     "name": "AudiSoft API",
-    "description": "Coleccion de endpoints REST para la gestion de Estudiantes, Profesores y Notas.",
+    "description": "Coleccion de endpoints REST para la gestion de Estudiantes, Profesores y Notas. Ejecutar primero 'Auth > Login': guarda el token automaticamente y el resto de las peticiones lo usan sin configuracion adicional.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    { "key": "baseUrl", "value": "http://localhost:5080/api", "type": "string" }
+    { "key": "baseUrl", "value": "http://localhost:5080/api", "type": "string" },
+    { "key": "token", "value": "", "type": "string" }
   ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
   "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const respuesta = pm.response.json();",
+                  "pm.collectionVariables.set('token', respuesta.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreUsuario\": \"admin\",\n  \"password\": \"Audisoft2026!\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        }
+      ]
+    },
     {
       "name": "Estudiantes",
       "item": [

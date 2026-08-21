@@ -26,6 +26,10 @@ services:
         condition: service_healthy
     environment:
       ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=AudiSoftDb;User Id=sa;Password=AudiSoft#2026;TrustServerCertificate=True"
+      Jwt__Key: "9SO/2AUZHbhvTwaV3qAzvG1/pcvgFmdbkqwJkntSMSLWsxiyDGe7PeR7njNS+lah"
+      Jwt__Issuer: "AudiSoftApi"
+      Jwt__Audience: "AudiSoftClientes"
+      Jwt__ExpiraMinutos: "60"
     ports:
       - "5080:8080"
 
