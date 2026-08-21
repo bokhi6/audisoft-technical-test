@@ -1,0 +1,200 @@
+{
+  "info": {
+    "name": "AudiSoft API",
+    "description": "Coleccion de endpoints REST para la gestion de Estudiantes, Profesores y Notas.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5080/api", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Estudiantes",
+      "item": [
+        {
+          "name": "Listar (paginado)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/estudiantes?pageNumber=1&pageSize=3",
+              "host": ["{{baseUrl}}"],
+              "path": ["estudiantes"],
+              "query": [
+                { "key": "pageNumber", "value": "1" },
+                { "key": "pageSize", "value": "3" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar simple (para selects)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/estudiantes/lista", "host": ["{{baseUrl}}"], "path": ["estudiantes", "lista"] }
+          }
+        },
+        {
+          "name": "Obtener por id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/estudiantes/1", "host": ["{{baseUrl}}"], "path": ["estudiantes", "1"] }
+          }
+        },
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo Estudiante\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/estudiantes", "host": ["{{baseUrl}}"], "path": ["estudiantes"] }
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nombre Actualizado\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/estudiantes/1", "host": ["{{baseUrl}}"], "path": ["estudiantes", "1"] }
+          }
+        },
+        {
+          "name": "Eliminar (409 si tiene notas asociadas)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/estudiantes/1", "host": ["{{baseUrl}}"], "path": ["estudiantes", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profesores",
+      "item": [
+        {
+          "name": "Listar (paginado)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/profesores?pageNumber=1&pageSize=3",
+              "host": ["{{baseUrl}}"],
+              "path": ["profesores"],
+              "query": [
+                { "key": "pageNumber", "value": "1" },
+                { "key": "pageSize", "value": "3" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar simple (para selects)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/profesores/lista", "host": ["{{baseUrl}}"], "path": ["profesores", "lista"] }
+          }
+        },
+        {
+          "name": "Obtener por id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/profesores/1", "host": ["{{baseUrl}}"], "path": ["profesores", "1"] }
+          }
+        },
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nuevo Profesor\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/profesores", "host": ["{{baseUrl}}"], "path": ["profesores"] }
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Nombre Actualizado\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/profesores/1", "host": ["{{baseUrl}}"], "path": ["profesores", "1"] }
+          }
+        },
+        {
+          "name": "Eliminar (409 si tiene notas asociadas)",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/profesores/1", "host": ["{{baseUrl}}"], "path": ["profesores", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notas",
+      "item": [
+        {
+          "name": "Listar (paginado)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/notas?pageNumber=1&pageSize=3",
+              "host": ["{{baseUrl}}"],
+              "path": ["notas"],
+              "query": [
+                { "key": "pageNumber", "value": "1" },
+                { "key": "pageSize", "value": "3" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Obtener por id",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/notas/1", "host": ["{{baseUrl}}"], "path": ["notas", "1"] }
+          }
+        },
+        {
+          "name": "Crear",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Parcial 3\",\n  \"idEstudiante\": 1,\n  \"idProfesor\": 1,\n  \"valor\": 4.5\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/notas", "host": ["{{baseUrl}}"], "path": ["notas"] }
+          }
+        },
+        {
+          "name": "Actualizar",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Parcial 3\",\n  \"idEstudiante\": 1,\n  \"idProfesor\": 1,\n  \"valor\": 3.8\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/notas/1", "host": ["{{baseUrl}}"], "path": ["notas", "1"] }
+          }
+        },
+        {
+          "name": "Eliminar",
+          "request": {
+            "method": "DELETE",
+            "url": { "raw": "{{baseUrl}}/notas/1", "host": ["{{baseUrl}}"], "path": ["notas", "1"] }
+          }
+        }
+      ]
+    }
+  ]
+}

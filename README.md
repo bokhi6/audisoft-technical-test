@@ -140,11 +140,13 @@ URL base: `http://localhost:5080/api`. Las respuestas de error siguen el estánd
 | Notas | `GET` | `/notas?pageNumber=&pageSize=` | Listado paginado, incluye nombre de estudiante y profesor |
 | | `POST` / `PUT` / `DELETE` | `/notas...` | CRUD estándar |
 
-La especificación completa, con esquemas de request/response, está disponible en Swagger (`/swagger`).
+La especificación completa, con esquemas de request/response, está disponible en Swagger (`/swagger`). También se incluye una colección de Postman lista para importar en `entregables/AudiSoft.postman_collection.json`.
 
 ---
 
 ## Pruebas y calidad de código
+
+Cada push a `master` ejecuta un pipeline de integración continua (build, análisis estático y pruebas del backend; lint y build del frontend) — ver `.github/workflows/ci.yml`.
 
 ```bash
 # Backend
