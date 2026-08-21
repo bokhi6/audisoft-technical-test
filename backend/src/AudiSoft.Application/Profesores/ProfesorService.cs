@@ -95,5 +95,5 @@ public class ProfesorService : IProfesorService
         }
     }
 
-    private static ProfesorDto MapearADto(Profesor profesor) => new(profesor.Id, profesor.Nombre);
+    private static ProfesorDto MapearADto(Profesor profesor) => new(profesor.Id, profesor.Nombre, profesor.Notas.Count);
 }

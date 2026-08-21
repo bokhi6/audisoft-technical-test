@@ -15,7 +15,7 @@ public class ProfesorRepository : IProfesorRepository
 
     public async Task<(List<Profesor> Items, int TotalCount)> ObtenerPaginadoAsync(int pageNumber, int pageSize)
     {
-        var query = _context.Profesores.AsNoTracking().OrderBy(p => p.Id);
+        var query = _context.Profesores.AsNoTracking().Include(p => p.Notas).OrderBy(p => p.Id);
 
         var totalCount = await query.CountAsync();
         var items = await query
@@ -30,7 +30,7 @@ public class ProfesorRepository : IProfesorRepository
         => await _context.Profesores.AsNoTracking().OrderBy(p => p.Nombre).ToListAsync();
 
     public async Task<Profesor?> ObtenerPorIdAsync(int id)
-        => await _context.Profesores.FirstOrDefaultAsync(p => p.Id == id);
+        => await _context.Profesores.Include(p => p.Notas).FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<bool> ExisteAsync(int id)
         => await _context.Profesores.AnyAsync(p => p.Id == id);

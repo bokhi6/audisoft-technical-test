@@ -95,5 +95,5 @@ public class EstudianteService : IEstudianteService
         }
     }
 
-    private static EstudianteDto MapearADto(Estudiante estudiante) => new(estudiante.Id, estudiante.Nombre);
+    private static EstudianteDto MapearADto(Estudiante estudiante) => new(estudiante.Id, estudiante.Nombre, estudiante.Notas.Count);
 }
